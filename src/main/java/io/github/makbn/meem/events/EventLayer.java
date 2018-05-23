@@ -26,6 +26,7 @@ public class EventLayer {
         this.traceLayer     = new LayerGroup("Events");
         this.staticEvents   = new LayerGroup(traceLayer,"Static View");
         this.trafficLayer   = new LayerGroup("Traffic");
+        this.traceLayer.add(trafficLayer);
 
         init();
     }

@@ -67,7 +67,7 @@ public class IOUtils {
 
 
     public static LocationGraph loadData(final String RUNNING_PATH) throws IOException {
-        LocationGraph lg;
+        LocationGraph lg=null;
         File vertexData = new File(RUNNING_PATH + "/data/data_vertex.csv");
         File edgeData = new File(RUNNING_PATH + "/data/data_edges.csv");
 
@@ -101,9 +101,9 @@ public class IOUtils {
                     App.main(null);
                 }
             });
-            lg = IOUtils.createFromSQL(RUNNING_PATH);
+           /* lg = IOUtils.createFromSQL(RUNNING_PATH);
             IOUtils.saveToFile(lg.getEdgeCSV(), RUNNING_PATH + "/data/data_edges.csv");
-            IOUtils.saveToFile(lg.getVerticesCSV(), RUNNING_PATH + "/data/data_vertex.csv");
+            IOUtils.saveToFile(lg.getVerticesCSV(), RUNNING_PATH + "/data/data_vertex.csv");*/
         }
         Utils.init(lg, RUNNING_PATH);
         return lg;

@@ -9,6 +9,8 @@ import io.github.makbn.meemlocationgraph.*;
 
 import io.github.makbn.meemmapviewer.*;
 
+import java.io.File;
+import java.net.URL;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -46,6 +48,10 @@ public class App{
             if (lg == null) {
 
                 RUNNING_PATH = App.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+                ClassLoader classLoader = App.class.getClassLoader();
+                File file = new File(classLoader.getResource("data/").getFile());
+                System.out.println(file.isDirectory());
+
                 Utils.init(null, RUNNING_PATH);
                 if (RUNNING_PATH.charAt(RUNNING_PATH.length() - 1) != '/') {
                     RUNNING_PATH = RUNNING_PATH.substring(0, RUNNING_PATH.lastIndexOf("/"));
@@ -53,11 +59,10 @@ public class App{
 
                 lg=IOUtils.loadData(RUNNING_PATH);
                 ArrayList<DirectedPath> mainPth = MainPathFactory.mainPath(RUNNING_PATH + "/data/path.xls");
-                HashMap<DirectedPath.PathType,ArrayList<DirectedPath>> otherPath=MainPathFactory.airAndRailWay(RUNNING_PATH +"/data/path_other.xls");
+                HashMap<DirectedPath.PathType,ArrayList<DirectedPath>> otherPath=MainPathFactory.airAndRailWay(RUNNING_PATH + "/data/path_other.xls");
 
                 EventLayer eventLayer=new EventLayer(lg,meem.getTreeMap());
                 EvidenceLayer evidenceLayer=new EvidenceLayer(meem.getTreeMap());
-
 
                 //Add routing path of each trace
                 meem.getTreeMap().getViewer().getMapPolygonList().addAll(eventLayer.getTraceGraph());
