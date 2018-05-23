@@ -14,7 +14,7 @@ import java.util.Map;
 public class EventLayer {
 
     private final LayerGroup staticEvents;
-    private LayerGroup traceLayer,trafficLayer;
+    private LayerGroup traceLayer, pathLayer;
     private JMapViewerTree tree;
     private HashMap<String,Layer> layerMap;
     private LocationGraph<LocationVertex, PathEdge<LocationVertex>> locationGraph;
@@ -25,8 +25,8 @@ public class EventLayer {
         this.layerMap       = new HashMap<>();
         this.traceLayer     = new LayerGroup("Events");
         this.staticEvents   = new LayerGroup(traceLayer,"Static View");
-        this.trafficLayer   = new LayerGroup("Traffic");
-        this.traceLayer.add(trafficLayer);
+        this.pathLayer = new LayerGroup("Paths");
+        this.staticEvents.add(pathLayer);
 
         init();
     }
@@ -39,8 +39,9 @@ public class EventLayer {
         addTraceLayer(3000, 5000);
         addTraceLayer(5000, Integer.MAX_VALUE);
 
-        Layer cities = trafficLayer.addLayer("Cities");
-        Layer states = trafficLayer.addLayer("States");
+        Layer cities = staticEvents.addLayer("Cities");
+        Layer states = staticEvents.addLayer("States");
+
 
         this.tree.addLayer(cities);
         this.tree.addLayer(states);
@@ -54,7 +55,7 @@ public class EventLayer {
         String s = String.valueOf(start);
         String e = (end == Integer.MAX_VALUE) ? "" : String.valueOf(end);
 
-        Layer layer0 = staticEvents.addLayer(s+"\t\t< W <\t\t"+e);
+        Layer layer0 = pathLayer.addLayer(s+"\t\t< W <\t\t"+e);
         layer0.setVisible(true);
         tree.addLayer(layer0);
         layerMap.put(s+"-"+end,layer0);
@@ -105,10 +106,10 @@ public class EventLayer {
             MapMarkerCircle circleInput,circleOutput;
 
             if (rTotal >= 0.2f) {
-                circleInput = new MapMarkerCircle(layerMap.get("cities"), vertex.getpCity()
+                circleInput = new MapMarkerCircle(layerMap.get("cities"), vertex.geteCity()
                         , new Coordinate(vertex.getLat(), vertex.getLon()), rInput);
 
-                circleOutput = new MapMarkerCircle(layerMap.get("cities"), vertex.getpCity()
+                circleOutput = new MapMarkerCircle(layerMap.get("cities"), vertex.geteCity()
                         , new Coordinate(vertex.getLat(), vertex.getLon()), rOutput);
             }else{
                 circleInput = new MapMarkerCircle(layerMap.get("cities"), "", new Coordinate(vertex.getLat(), vertex.getLon()), rInput);

@@ -51,7 +51,7 @@ public class IOUtils {
             return GraphFactory.createFromSQL("127.0.0.1",
                     "ExMdatabase",
                     "DBUser3",
-                    "DBPass3",
+                    "DBPass1234",
                     null,
                     null,
                     null,
@@ -101,9 +101,9 @@ public class IOUtils {
                     App.main(null);
                 }
             });
-           /* lg = IOUtils.createFromSQL(RUNNING_PATH);
+            lg = IOUtils.createFromSQL(RUNNING_PATH);
             IOUtils.saveToFile(lg.getEdgeCSV(), RUNNING_PATH + "/data/data_edges.csv");
-            IOUtils.saveToFile(lg.getVerticesCSV(), RUNNING_PATH + "/data/data_vertex.csv");*/
+            IOUtils.saveToFile(lg.getVerticesCSV(), RUNNING_PATH + "/data/data_vertex.csv");
         }
         Utils.init(lg, RUNNING_PATH);
         return lg;

@@ -40,14 +40,8 @@
 
         <dependency>
             <groupId>com.github.makbn</groupId>
-            <artifactId>meem-locationgraph</artifactId>
-            <version>v1.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.makbn</groupId>
             <artifactId>meem-preprocessor</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
 
     </dependencies>
