@@ -48,6 +48,7 @@ public class App{
             if (lg == null) {
 
                 RUNNING_PATH = App.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+                System.out.println("raw RP:"+RUNNING_PATH);
                 ClassLoader classLoader = App.class.getClassLoader();
                 File file = new File(classLoader.getResource("data/").getFile());
                 System.out.println(file.isDirectory());
@@ -56,6 +57,7 @@ public class App{
                 if (RUNNING_PATH.charAt(RUNNING_PATH.length() - 1) != '/') {
                     RUNNING_PATH = RUNNING_PATH.substring(0, RUNNING_PATH.lastIndexOf("/"));
                 }
+                System.out.println("RP:"+RUNNING_PATH);
 
                 lg=IOUtils.loadData(RUNNING_PATH);
                 ArrayList<DirectedPath> mainPth = MainPathFactory.mainPath(RUNNING_PATH + "/data/path.xls");
@@ -65,6 +67,7 @@ public class App{
                 EvidenceLayer evidenceLayer=new EvidenceLayer(meem.getTreeMap());
 
                 //Add routing path of each trace
+                meem.getTreeMap().setAutoscrolls(true);
                 meem.getTreeMap().getViewer().getMapPolygonList().addAll(eventLayer.getTraceGraph());
                 meem.getTreeMap().getViewer().getMapMarkerList().addAll(eventLayer.getCityTraffic());
                 meem.getTreeMap().getViewer().getMapMarkerList().addAll(eventLayer.getStateTraffic());
