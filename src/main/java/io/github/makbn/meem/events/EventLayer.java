@@ -6,14 +6,14 @@ import io.github.makbn.meemlocationgraph.PathEdge;
 import io.github.makbn.meemlocationgraph.Utils;
 import io.github.makbn.meemmapviewer.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class EventLayer {
 
     private final LayerGroup staticEvents;
+    private final Layer dynamicEvents;
     private LayerGroup traceLayer, pathLayer;
     private JMapViewerTree tree;
     private HashMap<String,Layer> layerMap;
@@ -25,6 +25,7 @@ public class EventLayer {
         this.layerMap       = new HashMap<>();
         this.traceLayer     = new LayerGroup("Events");
         this.staticEvents   = new LayerGroup(traceLayer,"Static View");
+        this.dynamicEvents  = new Layer(traceLayer,"Dynamic View");
         this.pathLayer = new LayerGroup("Paths");
         this.staticEvents.add(pathLayer);
 
@@ -172,6 +173,75 @@ public class EventLayer {
         MapMarkerCircle circle=new MapMarkerCircle(layer,name,new Coordinate(geo[0],geo[1]),rInput);
         circle.setStyle(style);
         return circle;
+    }
+
+
+    public void dynamicView(LocationGraph lg){
+        ArrayList<PathEdge> edgs=new ArrayList(lg.getEdges());
+        Collections.sort(edgs, new Comparator<PathEdge>() {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSS");
+            @Override
+            public int compare(PathEdge o1, PathEdge o2) {
+                try {
+                    Date d1=format.parse(o1.getVertexDst().getDate());
+                    Date d2=format.parse(o2.getVertexDst().getDate());
+                    return d1.compareTo(d2);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
+        HashMap<String,ArrayList<PathEdge>> dividedByDate=new HashMap<>();
+
+        for (int i = 0; i < edgs.size(); i++) {
+            int w = edgs.get(i).getWeight();
+            final PathEdge<LocationVertex> p = edgs.get(i);
+            if (w > 500 && !p.getVertexSrc().equals(p.getVertexDst())) {
+                final MapMarkerCircle[] dot = new MapMarkerCircle[1];
+                dot[0] = new MapMarkerDot(dynamicEvents, p.getVertexSrc().getpCity() + "-" + p.getVertexDst().getpCity(), p.getVertexSrc().getLat(), p.getVertexSrc().getLon());
+                Runnable r = new Runnable() {
+                    @Override
+                    public void run() {
+
+                        double x = p.getVertexSrc().getLat();
+                        double y = p.getVertexSrc().getLon();
+
+                        double y1 = p.getVertexSrc().getLon();
+                        double y2 = p.getVertexDst().getLon();
+                        double x1 = p.getVertexSrc().getLat();
+                        double x2 = p.getVertexDst().getLat();
+
+                        double m = ((y2 - y1) / (x2 - x1));
+                        double constant = y1 - (m * x1);
+                        double step = -0.0005;
+                        while (true) {
+                            step = step * (-1);
+                            while (x <= x2 && x >= x1) {
+                                x = x + step;
+                                y = (m * x) + constant;
+                                dot[0].setLat(x);
+                                dot[0].setLon(y);
+                                try {
+                                    Thread.sleep(1);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                tree.getViewer().repaint();
+                            }
+                            if (step > 0)
+                                x = x1;
+                            else
+                                x = x1;
+                        }
+                    }
+                };
+                Thread t = new Thread(r);
+                t.start();
+                tree.getViewer().addMapMarker(dot[0]);
+            }
+        }
     }
 
 }
