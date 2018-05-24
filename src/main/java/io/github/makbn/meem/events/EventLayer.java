@@ -194,7 +194,17 @@ public class EventLayer {
             }
         });
         HashMap<String,ArrayList<PathEdge>> dividedByDate=new HashMap<>();
+        for(final PathEdge pe:edgs){
+            String date=pe.getVertexDst().getDate().substring(0,10);
+            if(dividedByDate.containsKey(date)){
+                dividedByDate.get(date).add(pe);
+            }else {
+                dividedByDate.put(date,new ArrayList<PathEdge>(){{
+                    add(pe);
+                }});
+            }
 
+        }
         for (int i = 0; i < edgs.size(); i++) {
             int w = edgs.get(i).getWeight();
             final PathEdge<LocationVertex> p = edgs.get(i);
