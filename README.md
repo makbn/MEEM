@@ -9,7 +9,7 @@ MEEM stands for Meeting of Events and Evidence on the Map, which integrates two 
 
 ## Download
 
-Download MEEM With Example Data from [here](http://a.b)
+Download MEEM with example data from [here](http://a.b)
 
 ## Contributors
 
