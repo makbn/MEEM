@@ -9,6 +9,8 @@ import io.github.makbn.meemmapviewer.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class EventLayer {
 
@@ -41,11 +43,12 @@ public class EventLayer {
         addTraceLayer(5000, Integer.MAX_VALUE);
 
         Layer cities = staticEvents.addLayer("Cities");
-        Layer states = staticEvents.addLayer("States");
+        Layer states = staticEvents.addLayer("Provinces");
 
 
         this.tree.addLayer(cities);
         this.tree.addLayer(states);
+        this.tree.addLayer(dynamicEvents);
 
         layerMap.put("cities",cities);
         layerMap.put("states",states);
@@ -55,8 +58,12 @@ public class EventLayer {
     private void addTraceLayer(int start, int end){
         String s = String.valueOf(start);
         String e = (end == Integer.MAX_VALUE) ? "" : String.valueOf(end);
-
-        Layer layer0 = pathLayer.addLayer(s+"\t\t< W <\t\t"+e);
+        Layer layer0;
+        if(end !=Integer.MAX_VALUE) {
+            layer0 = pathLayer.addLayer(s + "\t\t< W <\t\t" + e);
+        }else {
+            layer0 = pathLayer.addLayer("W >\t\t" + s);
+        }
         layer0.setVisible(true);
         tree.addLayer(layer0);
         layerMap.put(s+"-"+end,layer0);
@@ -205,53 +212,87 @@ public class EventLayer {
             }
 
         }
-        for (int i = 0; i < edgs.size(); i++) {
-            int w = edgs.get(i).getWeight();
-            final PathEdge<LocationVertex> p = edgs.get(i);
-            if (w > 500 && !p.getVertexSrc().equals(p.getVertexDst())) {
-                final MapMarkerCircle[] dot = new MapMarkerCircle[1];
-                dot[0] = new MapMarkerDot(dynamicEvents, p.getVertexSrc().getpCity() + "-" + p.getVertexDst().getpCity(), p.getVertexSrc().getLat(), p.getVertexSrc().getLon());
-                Runnable r = new Runnable() {
-                    @Override
-                    public void run() {
+        startDynamicThread(dividedByDate);
 
-                        double x = p.getVertexSrc().getLat();
-                        double y = p.getVertexSrc().getLon();
 
-                        double y1 = p.getVertexSrc().getLon();
-                        double y2 = p.getVertexDst().getLon();
-                        double x1 = p.getVertexSrc().getLat();
-                        double x2 = p.getVertexDst().getLat();
+    }
 
-                        double m = ((y2 - y1) / (x2 - x1));
-                        double constant = y1 - (m * x1);
-                        double step = -0.0005;
-                        while (true) {
-                            step = step * (-1);
-                            while (x <= x2 && x >= x1) {
-                                x = x + step;
-                                y = (m * x) + constant;
-                                dot[0].setLat(x);
-                                dot[0].setLon(y);
-                                try {
-                                    Thread.sleep(1);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                tree.getViewer().repaint();
+    private void startDynamicThread(final HashMap<String, ArrayList<PathEdge>> dividedByDate) {
+        Thread dynamicThread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    final ArrayList<MapMarkerDot> dots=new ArrayList<>();
+                    for(MapMarkerDot mpd:dots)
+                        tree.getViewer().removeMapMarker(mpd);
+                    for(Map.Entry<String,ArrayList<PathEdge>> entry:dividedByDate.entrySet()){
+                        ArrayList<PathEdge> edgs=entry.getValue();
+                        Executor executor = Executors.newFixedThreadPool(5);
+                        ArrayList<Thread> threads=new ArrayList<>();
+                        System.out.println("====================================================================");
+                        System.out.println("Date:"+entry.getKey()+ "\tsize:"+entry.getValue().size());
+                        System.out.println("====================================================================");
+                        int failCount=0;
+                        for (int i = 0; i < edgs.size(); i++) {
+                            int w = edgs.get(i).getWeight();
+                            final PathEdge<LocationVertex> p = edgs.get(i);
+                            if (w > 500 && !p.getVertexSrc().equals(p.getVertexDst())) {
+                                System.out.println("New Dynamic thread"+p.toString());
+                                final MapMarkerDot[] dot = new MapMarkerDot[1];
+                                dot[0] = new MapMarkerDot(dynamicEvents, "", p.getVertexSrc().getLat(), p.getVertexSrc().getLon());
+                                dot[0].setStyle(EventStyle.getDynamicViewDotStyle());
+                                dots.add(dot[0]);
+                                Runnable r = new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        double x = p.getVertexSrc().getLat();
+                                        double y = p.getVertexSrc().getLon();
+
+                                        double y1 = p.getVertexSrc().getLon();
+                                        double y2 = p.getVertexDst().getLon();
+                                        double x1 = p.getVertexSrc().getLat();
+                                        double x2 = p.getVertexDst().getLat();
+
+                                        double m = ((y2 - y1) / (x2 - x1));
+                                        double constant = y1 - (m * x1);
+                                        double step = Math.sqrt((((int)(x2-x1))^2)+(((int)(y2-y1))^2))/300;
+                                        while (x <= x2 && x >= x1) {
+                                            x = x + step;
+                                            y = (m * x) + constant;
+                                            dot[0].setLat(x);
+                                            dot[0].setLon(y);
+                                            try {
+                                                Thread.sleep(10);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                            tree.getViewer().repaint();
+                                        }
+                                        //tree.getViewer().removeMapMarker(dot[0]);
+                                    }
+                                };
+                                /*Thread t=new Thread(r);
+                                t.start();*/
+                                executor.execute(r);
+                                tree.getViewer().addMapMarker(dot[0]);
+
+                            }else {
+                                System.out.print("*");
+                                failCount++;
                             }
-                            if (step > 0)
-                                x = x1;
-                            else
-                                x = x1;
+                        }
+                        System.out.println("failCount:"+failCount);
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
-                };
-                Thread t = new Thread(r);
-                t.start();
-                tree.getViewer().addMapMarker(dot[0]);
+                }
             }
-        }
+        });
+        dynamicThread.start();
     }
 
 }

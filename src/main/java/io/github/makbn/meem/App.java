@@ -9,6 +9,8 @@ import io.github.makbn.meemlocationgraph.*;
 
 import io.github.makbn.meemmapviewer.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
@@ -19,6 +21,7 @@ public class App{
 
     private static LocationGraph<LocationVertex, PathEdge<LocationVertex>> lg;
     public static String RUNNING_PATH;
+    private static boolean isDynamicEnabled=false;
 
     private static Coordinate c(double lat, double lon) {
         return new Coordinate(lat, lon);
@@ -63,8 +66,8 @@ public class App{
                 ArrayList<DirectedPath> mainPth = MainPathFactory.mainPath(RUNNING_PATH + "/data/path.xls");
                 HashMap<DirectedPath.PathType,ArrayList<DirectedPath>> otherPath=MainPathFactory.airAndRailWay(RUNNING_PATH + "/data/path_other.xls");
 
-                EventLayer eventLayer=new EventLayer(lg,meem.getTreeMap());
-                EvidenceLayer evidenceLayer=new EvidenceLayer(meem.getTreeMap());
+                final EventLayer eventLayer=new EventLayer(lg,meem.getTreeMap());
+                final EvidenceLayer evidenceLayer=new EvidenceLayer(meem.getTreeMap());
 
                 //Add routing path of each trace
                 meem.getTreeMap().setAutoscrolls(true);
@@ -92,6 +95,15 @@ public class App{
                 meem.getTreeMap().getViewer().getMapPolygonList().addAll(airline.getRoads());
 
                 meem.getTreeMap().getViewer().repaint();
+                MapView.getDynamicBtn().addActionListener((new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(!isDynamicEnabled) {
+                            eventLayer.dynamicView(lg);
+                            isDynamicEnabled=true;
+                        }
+                    }
+                }));
 
                 meem.getFrame().setVisible(true);
 

@@ -73,4 +73,9 @@ public class EventStyle{
     public static Style getDotStyle(String type){
         return dotStyleMap.get(type);
     }
+
+
+    public static Style getDynamicViewDotStyle() {
+        return new Style(Color.BLACK, Color.red, (Stroke)null, null);
+    }
 }
