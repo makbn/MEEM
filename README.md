@@ -14,6 +14,6 @@ Download MEEM With Example Data from [here](http://a.b)
 ## Contributors
 
  * [Dr. Behshid Behkamal](http://behkamal.profcms.um.ac.ir/)
- * [Dr. Asef Pour'masom](http://asef.pourmasoumi.student.um.ac.ir/)
+ * [Dr. Asef Pourmasoumi](http://asef.pourmasoumi.student.um.ac.ir/)
  * [Mehdi Akbarian-Rastaghi](www.linkedin.com/in/mehdiakbarian)
 
