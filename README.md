@@ -1,7 +1,7 @@
 # MEEM
 Meeting of Event and Evidence on the Map
 
-![MEEM UI] (https://cdn.pbrd.co/images/Hnybpzk.png)
+![MEEM UI](https://cdn.pbrd.co/images/Hnybpzk.png)
 
 ## How MEEM works?
 
@@ -9,7 +9,7 @@ MEEM stands for Meeting of Events and Evidence on the Map, which integrates two 
 
 ## Download
 
-Download MEEM With Example Data from [here](# meem)
+Download MEEM With Example Data from [here](http://a.b)
 
 ## Contributors
 
