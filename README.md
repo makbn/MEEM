@@ -11,7 +11,7 @@ Download and run MEEM with example data from [here](https://github.com/makbn/mee
 ## Contributors
 
  * [Mehdi Akbarian-Rastaghi](https://linkedin.com/in/mehdiakbarian)
- * [Dr. Behshid Behkamal](http://behkamal.profcms.um.ac.ir/)
- * [Dr. Asef Pourmasoumi](http://asef.pourmasoumi.student.um.ac.ir/)
+ * [Behshid Behkamal](http://behkamal.profcms.um.ac.ir/)
+ * [Asef Pourmasoumi](http://asef.pourmasoumi.student.um.ac.ir/)
 
 
