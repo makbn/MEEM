@@ -72,6 +72,7 @@ public class EventLayer {
 
     public ArrayList<MapPolyLine> getTraceGraph(){
         ArrayList<MapPolyLine> list=new ArrayList<>();
+        System.out.println("=========================================================================");
         for (int i = 0; i < locationGraph.getEdges().size(); i++) {
             int w = locationGraph.getEdges().get(i).getWeight();
 
@@ -87,11 +88,15 @@ public class EventLayer {
             coordinates.add(new Coordinate(p.getVertexDst().getLat(), p.getVertexDst().getLon()));
             coordinates.add(new Coordinate(p.getVertexDst().getLat(), p.getVertexDst().getLon()));
 
+            System.out.println(p.getVertexSrc().getpCity()+","+p.getVertexDst().getpCity()+","+p.getWeight());
+
             MapPolyLine polyLine = new MapPolyLine(coordinates);
             polyLine.setStyle(EventStyle.getLineStyle(w));
             polyLine.setLayer(getLayer(w));
             list.add(polyLine);
         }
+        System.out.println("=========================================================================");
+
         return list;
     }
 
@@ -140,10 +145,16 @@ public class EventLayer {
         Style output=EventStyle.getDotStyle("outputInputTraffic");
 
         for(Map.Entry<String,Integer> entry:locationGraph.getStateInputTraffic().entrySet()){
-            markers.add(getCircle(entry.getValue(), entry.getKey(), input, layerMap.get("states")));
+            MapMarkerCircle mmc =getCircle(entry.getValue(), entry.getKey(), input, layerMap.get("states"));
+            if(mmc != null) {
+                markers.add(mmc);
+            }
         }
         for(Map.Entry<String,Integer> entry:locationGraph.getStateOutputTraffic().entrySet()){
-            markers.add(getCircle(entry.getValue(), entry.getKey(), output, layerMap.get("states")));
+            MapMarkerCircle mmc = getCircle(entry.getValue(), entry.getKey(), output, layerMap.get("states"));
+            if(mmc != null) {
+                markers.add(mmc);
+            }
         }
         return markers;
 
@@ -175,8 +186,10 @@ public class EventLayer {
     private MapMarkerCircle getCircle(int traffic,String name,Style style,Layer layer){
         float rInput=getRadius(traffic,100000,10,0.5,0.05);
         double[] geo= Utils.getStateGeo(name);
-        if(geo==null)
+        if(geo==null) {
             System.out.println(name);
+            return null;
+        }
         MapMarkerCircle circle=new MapMarkerCircle(layer,name,new Coordinate(geo[0],geo[1]),rInput);
         circle.setStyle(style);
         return circle;

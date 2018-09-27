@@ -64,7 +64,7 @@ public class App{
 
                 lg=IOUtils.loadData(RUNNING_PATH);
                 ArrayList<DirectedPath> mainPth = MainPathFactory.mainPath(RUNNING_PATH + "/data/path.xls");
-                HashMap<DirectedPath.PathType,ArrayList<DirectedPath>> otherPath=MainPathFactory.airAndRailWay(RUNNING_PATH + "/data/path_other.xls");
+                HashMap<DirectedPath.PathType,ArrayList<DirectedPath>> otherPath=MainPathFactory.airAndRailWay(RUNNING_PATH + "/data/path_other_ca.xls");
 
                 final EventLayer eventLayer=new EventLayer(lg,meem.getTreeMap());
                 final EvidenceLayer evidenceLayer=new EvidenceLayer(meem.getTreeMap());
@@ -78,9 +78,9 @@ public class App{
                 lg.updateMaxTraffic();
 
 
-                EvidencePathVisualization mainPath=evidenceLayer.drawPath(EvidenceLayer.EvidenceType.MainPath,mainPth);
-                meem.getTreeMap().getViewer().getMapMarkerList().addAll(mainPath.getCities());
-                meem.getTreeMap().getViewer().getMapPolygonList().addAll(mainPath.getRoads());
+               // EvidencePathVisualization mainPath=evidenceLayer.drawPath(EvidenceLayer.EvidenceType.MainPath,mainPth);
+            //    meem.getTreeMap().getViewer().getMapMarkerList().addAll(mainPath.getCities());
+            //    meem.getTreeMap().getViewer().getMapPolygonList().addAll(mainPath.getRoads());
 
 
                 EvidencePathVisualization railway=evidenceLayer.drawPath(EvidenceLayer.EvidenceType.RailWay
