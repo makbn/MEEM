@@ -9,7 +9,7 @@ MEEM stands for Meeting of Events and Evidence on the Map, which integrates two 
 
 ## Run
 
-Download and run MEEM with example data from [here](https://github.com/makbn/meem/releases/download/1.0-SNAPSHOT/MEEM.zip) or see [release page](https://github.com/makbn/meem/releases)
+Download and run MEEM with example data from [here](http://meem.sakku.cloud/MEEM.zip) or see [release page](https://github.com/makbn/meem/releases)
 
 ## Contributors
 
