@@ -23,6 +23,7 @@ public class MapView implements JMapViewerEventListener{
     private final JLabel zoomValue;
     private final JLabel mperpLabelName;
     private final JLabel mperpLabelValue;
+    private static JButton dynamicBtn;
 
     private MapView(String name){
         MAP=new JFrame(name);
@@ -65,6 +66,7 @@ public class MapView implements JMapViewerEventListener{
         panelBottom.add(getShowTileGrid());
         panelBottom.add(getShowZoomControls());
         panelBottom.add(getDisplayToFitMapMarkersBtn());
+        panelBottom.add(createDynamicVieBtn());
         panelBottom.setBackground(Color.WHITE);
         panelTop.setBackground(Color.WHITE);
         helpPanel.setBorder(new LineBorder(Color.gray));
@@ -116,6 +118,17 @@ public class MapView implements JMapViewerEventListener{
         });
 
         return button;
+    }
+
+    private JButton createDynamicVieBtn(){
+
+        dynamicBtn = new JButton("Enable Dynamic View");
+
+        return dynamicBtn;
+    }
+
+    public static JButton getDynamicBtn(){
+        return dynamicBtn;
     }
 
     private JComboBox<TileSource> getTileSourceSelector(){
@@ -223,6 +236,7 @@ public class MapView implements JMapViewerEventListener{
             }
         };
     }
+
 
     @Override
     public void processCommand(JMVCommandEvent command) {

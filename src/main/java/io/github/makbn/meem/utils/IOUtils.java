@@ -78,7 +78,7 @@ public class IOUtils {
             ArrayList<String> vertexRaw = IOUtils.readLines(vertexData);
             ArrayList<String> edgeRaw = IOUtils.readLines(edgeData);
             for (String s : vertexRaw) {
-                s = s.replace("\"","");
+                s =s.replace("\"","");
                 lg.addVertex(LocationVertex.getLocationVertex(s));
             }
 
