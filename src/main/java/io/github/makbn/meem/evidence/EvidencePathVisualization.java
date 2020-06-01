@@ -11,8 +11,8 @@ public class EvidencePathVisualization {
 
 
     public EvidencePathVisualization() {
-        this.roads=new ArrayList<>();
-        this.cities=new ArrayList<>();
+        this.roads = new ArrayList<>();
+        this.cities = new ArrayList<>();
     }
 
 

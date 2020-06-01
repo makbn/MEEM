@@ -7,7 +7,7 @@ import java.util.Properties;
 public class Config {
 
 
-    public static void fixEncoding(){
+    public static void fixEncoding() {
         Properties props = System.getProperties();
         props.setProperty("Dfile.encoding", "UTF-8");
         System.setProperty("file.encoding", "UTF-8");

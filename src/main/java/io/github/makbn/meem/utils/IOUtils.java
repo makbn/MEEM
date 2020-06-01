@@ -46,7 +46,7 @@ public class IOUtils {
 
     }
 
-    public static LocationGraph createFromSQL(String path){
+    public static LocationGraph createFromSQL(String path) {
         try {
             return GraphFactory.createFromSQL("127.0.0.1",
                     "ExMdatabase",
@@ -56,7 +56,7 @@ public class IOUtils {
                     null,
                     null,
                     null,
-                        path);
+                    path);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -67,7 +67,7 @@ public class IOUtils {
 
 
     public static LocationGraph loadData(final String RUNNING_PATH) throws IOException {
-        LocationGraph lg=null;
+        LocationGraph lg = null;
         File vertexData = new File(RUNNING_PATH + "/data/data_vertex.csv");
         File edgeData = new File(RUNNING_PATH + "/data/data_edges.csv");
 
@@ -78,7 +78,7 @@ public class IOUtils {
             ArrayList<String> vertexRaw = IOUtils.readLines(vertexData);
             ArrayList<String> edgeRaw = IOUtils.readLines(edgeData);
             for (String s : vertexRaw) {
-                s =s.replace("\"","");
+                s = s.replace("\"", "");
                 lg.addVertex(LocationVertex.getLocationVertex(s));
             }
 

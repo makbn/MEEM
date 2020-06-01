@@ -4,7 +4,6 @@ import io.github.makbn.meemlocationgraph.DirectedPath;
 import io.github.makbn.meemlocationgraph.LocationVertex;
 import io.github.makbn.meemmapviewer.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,64 +13,58 @@ import java.util.List;
 public class
 EvidenceLayer {
 
-    public enum EvidenceType{
-        MainPath,RailWay,AirLine;
-    }
-
     private final LayerGroup evidenceLayer;
-    private HashMap<String,ArrayList<DirectedPath>> evidences;
-    private JMapViewerTree tree;
-    private HashMap<String,AbstractLayer> layerMap;
-
-
+    private final HashMap<String, ArrayList<DirectedPath>> evidences;
+    private final JMapViewerTree tree;
+    private final HashMap<String, AbstractLayer> layerMap;
     public EvidenceLayer(JMapViewerTree tree) {
-        this.evidenceLayer=new LayerGroup("Evidence");
-        this.layerMap=new HashMap<>();
-        this.evidences=new HashMap<>();
-        this.tree=tree;
+        this.evidenceLayer = new LayerGroup("Evidence");
+        this.layerMap = new HashMap<>();
+        this.evidences = new HashMap<>();
+        this.tree = tree;
         init();
     }
 
-    private void init(){
-       LayerGroup mainPath=new LayerGroup(evidenceLayer,"Main Roads");
-       LayerGroup railway=new LayerGroup(evidenceLayer,"Railways");
-       LayerGroup airline=new LayerGroup(evidenceLayer,"Airlines");
+    private void init() {
+        LayerGroup mainPath = new LayerGroup(evidenceLayer, "Main Roads");
+        LayerGroup railway = new LayerGroup(evidenceLayer, "Railways");
+        LayerGroup airline = new LayerGroup(evidenceLayer, "Airlines");
 
 
-       layerMap.put("mainPath",mainPath);
-       layerMap.put("railway",railway);
-       layerMap.put("airline",airline);
+        layerMap.put("mainPath", mainPath);
+        layerMap.put("railway", railway);
+        layerMap.put("airline", airline);
 
     }
 
-    public EvidencePathVisualization drawPath(EvidenceType type,ArrayList<DirectedPath> paths) {
-        EvidencePathVisualization epv=new EvidencePathVisualization();
-        LayerGroup group=getLayerGroup(type);
-        MapPolyLine polyLine=null;
+    public EvidencePathVisualization drawPath(EvidenceType type, ArrayList<DirectedPath> paths) {
+        EvidencePathVisualization epv = new EvidencePathVisualization();
+        LayerGroup group = getLayerGroup(type);
+        MapPolyLine polyLine = null;
         for (DirectedPath directedPath : paths) {
             if (directedPath.getVertices().size() == 0)
                 continue;
-            Coordinate srcC=null;
+            Coordinate srcC = null;
             List<Coordinate> coordinates = new ArrayList<Coordinate>();
-            Layer layer =null;
-            if(directedPath.getAdditionalName()==null) {
+            Layer layer = null;
+            if (directedPath.getAdditionalName() == null) {
                 layer = group.addLayer(pathtToString(directedPath));
                 tree.addLayer(layer);
-            }else {
-                LayerGroup airlineLayer=getLayerGroupForAirline(directedPath.getAdditionalName());
-                layer =airlineLayer.addLayer(pathtToString(directedPath));
+            } else {
+                LayerGroup airlineLayer = getLayerGroupForAirline(directedPath.getAdditionalName());
+                layer = airlineLayer.addLayer(pathtToString(directedPath));
                 tree.addLayer(layer);
             }
             for (int i = 0; i < directedPath.getVertices().size(); i++) {
                 LocationVertex src = directedPath.getVertices().get(i);
-                srcC=new Coordinate(src.getLat(), src.getLon());
+                srcC = new Coordinate(src.getLat(), src.getLon());
                 coordinates.add(srcC);
-                MapMarkerCircle dotSrc = new MapMarkerDot( layer,src.getLat(),src.getLon());
+                MapMarkerCircle dotSrc = new MapMarkerDot(layer, src.getLat(), src.getLon());
                 dotSrc.setColor(Color.RED);
                 epv.getCities().add(dotSrc);
             }
             coordinates.add(srcC);
-            polyLine = new MapPolyLine(layer,coordinates);
+            polyLine = new MapPolyLine(layer, coordinates);
             polyLine.setName(directedPath.toString());
             polyLine.setStroke(directedPath.getStroke());
             polyLine.setColor(directedPath.getColor());
@@ -82,21 +75,21 @@ EvidenceLayer {
     }
 
     private LayerGroup getLayerGroupForAirline(String additionalName) {
-        if(layerMap.containsKey(additionalName)){
+        if (layerMap.containsKey(additionalName)) {
             return (LayerGroup) layerMap.get(additionalName);
-        }else {
-            LayerGroup layerGroup=new LayerGroup((LayerGroup) layerMap.get("airline"),additionalName);
-            layerMap.put(additionalName,layerGroup);
+        } else {
+            LayerGroup layerGroup = new LayerGroup((LayerGroup) layerMap.get("airline"), additionalName);
+            layerMap.put(additionalName, layerGroup);
             return layerGroup;
         }
     }
 
     private LayerGroup getLayerGroup(EvidenceType type) {
-        if(type==EvidenceType.RailWay){
+        if (type == EvidenceType.RailWay) {
             return (LayerGroup) layerMap.get("railway");
-        }else if(type==EvidenceType.AirLine){
+        } else if (type == EvidenceType.AirLine) {
             return (LayerGroup) layerMap.get("airline");
-        }else if(type==EvidenceType.MainPath){
+        } else if (type == EvidenceType.MainPath) {
             return (LayerGroup) layerMap.get("mainPath");
         }
         return null;
@@ -106,10 +99,14 @@ EvidenceLayer {
         String s = "";
 
         LocationVertex locationVertex;
-        for(Iterator i$ = directedPath.getVertices().iterator(); i$.hasNext(); s = s.concat(locationVertex.geteCity() + " - ")) {
-            locationVertex = (LocationVertex)i$.next();
+        for (Iterator i$ = directedPath.getVertices().iterator(); i$.hasNext(); s = s.concat(locationVertex.geteCity() + " - ")) {
+            locationVertex = (LocationVertex) i$.next();
         }
-        s=s.substring(0,s.length()-3);
+        s = s.substring(0, s.length() - 3);
         return s;
+    }
+
+    public enum EvidenceType {
+        MainPath, RailWay, AirLine
     }
 }

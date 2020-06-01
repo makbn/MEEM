@@ -10,7 +10,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class DataCorrection {
 
@@ -19,8 +22,8 @@ public class DataCorrection {
         HashMap<String, ArrayList<City>> canadaProvs = getCanadaStates();
         ArrayList<String> provs = new ArrayList<>(canadaProvs.keySet());
 
-        HashMap<String,String> pMap = new HashMap<>();
-        HashMap<String,City> cMap = new HashMap<>();
+        HashMap<String, String> pMap = new HashMap<>();
+        HashMap<String, City> cMap = new HashMap<>();
 
         int pIndex = 0;
         HashMap<String, Integer> cIndex = new HashMap<>();
@@ -31,7 +34,7 @@ public class DataCorrection {
         CSVReader reader = new CSVReader(new FileReader(inputFile), ',');
         List<String[]> csvBody = reader.readAll();
 
-        for (int i=0;  i < csvBody.size();i++){
+        for (int i = 0; i < csvBody.size(); i++) {
 
             String[] cols = csvBody.get(i);
 
@@ -39,24 +42,24 @@ public class DataCorrection {
             String prov = null;
             City city = null;
             String cKey = cols[12];
-            if(pMap.containsKey(pKey)){
+            if (pMap.containsKey(pKey)) {
                 prov = pMap.get(pKey);
-                if(cMap.containsKey(cKey)){
+                if (cMap.containsKey(cKey)) {
                     city = cMap.get(cKey);
-                }else {
+                } else {
                     int size = canadaProvs.get(prov).size();
                     city = canadaProvs.get(prov).get(cIndex.get(prov) % size);
-                    cMap.put(cKey,city);
-                    cIndex.put(prov, cIndex.get(prov)+1);
+                    cMap.put(cKey, city);
+                    cIndex.put(prov, cIndex.get(prov) + 1);
                 }
-            }else {
-                prov = provs.get((pIndex++)%provs.size());
+            } else {
+                prov = provs.get((pIndex++) % provs.size());
                 int size = canadaProvs.get(prov).size();
                 city = canadaProvs.get(prov).get(0);
-                cMap.put(cKey,city);
+                cMap.put(cKey, city);
                 cIndex.put(prov, 1);
-                cMap.put(cKey,city);
-                pMap.put(pKey,prov);
+                cMap.put(cKey, city);
+                pMap.put(pKey, prov);
             }
 
             csvBody.get(i)[10] = prov;
@@ -65,8 +68,8 @@ public class DataCorrection {
             csvBody.get(i)[12] = city.name;
             csvBody.get(i)[6] = city.name;
 
-            csvBody.get(i)[1] = city.lat+"";
-            csvBody.get(i)[2] = city.lon+"";
+            csvBody.get(i)[1] = city.lat + "";
+            csvBody.get(i)[2] = city.lon + "";
         }
 
         reader.close();
@@ -79,10 +82,10 @@ public class DataCorrection {
     }
 
 
-    private static HashMap<String, ArrayList<City>> getCanadaStates(){
+    private static HashMap<String, ArrayList<City>> getCanadaStates() {
         JSONParser parser = new JSONParser();
         HashMap<String, ArrayList<City>> provs = new HashMap<>();
-        int id =1;
+        int id = 1;
         try {
 
             Object obj = parser.parse(new FileReader(
@@ -94,18 +97,18 @@ public class DataCorrection {
             while (iterator.hasNext()) {
                 JSONObject item = iterator.next();
                 String key = (String) item.get("admin");
-                if(provs.containsKey(key)){
-                   provs.get(key)
-                           .add( new City((String) item.get("city"), Double.valueOf((String)item.get("lat")),
-                                   Double.valueOf((String) item.get("lng"))));
+                if (provs.containsKey(key)) {
+                    provs.get(key)
+                            .add(new City((String) item.get("city"), Double.valueOf((String) item.get("lat")),
+                                    Double.valueOf((String) item.get("lng"))));
 
-                }else {
+                } else {
                     String prov = key;
                     ArrayList<City> cities = new ArrayList<>();
-                    cities.add( new City((String) item.get("city"), Double.valueOf((String) item.get("lat")),
-                            Double.valueOf((String)item.get("lng"))));
+                    cities.add(new City((String) item.get("city"), Double.valueOf((String) item.get("lat")),
+                            Double.valueOf((String) item.get("lng"))));
 
-                    provs.put(prov,cities);
+                    provs.put(prov, cities);
                 }
             }
 
@@ -119,7 +122,7 @@ public class DataCorrection {
 }
 
 
-class City{
+class City {
 
     String name;
     double lat;
