@@ -30,14 +30,12 @@ public class App {
      * @param args Main program arguments
      */
     public static void main(final String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(new NimbusLookAndFeel());
-                    starter(args);
-                } catch (UnsupportedLookAndFeelException e) {
-                    e.printStackTrace();
-                }
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel(new NimbusLookAndFeel());
+                starter(args);
+            } catch (UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -88,13 +86,10 @@ public class App {
                 meem.getTreeMap().getViewer().getMapPolygonList().addAll(airline.getRoads());
 
                 meem.getTreeMap().getViewer().repaint();
-                MapView.getDynamicBtn().addActionListener((new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (!isDynamicEnabled) {
-                            eventLayer.dynamicView(lg);
-                            isDynamicEnabled = true;
-                        }
+                MapView.getDynamicBtn().addActionListener((e -> {
+                    if (!isDynamicEnabled) {
+                        eventLayer.dynamicView(lg);
+                        isDynamicEnabled = true;
                     }
                 }));
 

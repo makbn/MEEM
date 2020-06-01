@@ -199,21 +199,18 @@ public class EventLayer {
 
     public void dynamicView(LocationGraph lg) {
         ArrayList<PathEdge> edgs = new ArrayList(lg.getEdges());
-        Collections.sort(edgs, new Comparator<PathEdge>() {
-            final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSS");
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSS");
 
-            @Override
-            public int compare(PathEdge o1, PathEdge o2) {
-                try {
-                    Date d1 = format.parse(o1.getVertexDst().getDate());
-                    Date d2 = format.parse(o2.getVertexDst().getDate());
-                    return d1.compareTo(d2);
+        Collections.sort(edgs, (o1, o2) -> {
+            try {
+                Date d1 = format.parse(o1.getVertexDst().getDate());
+                Date d2 = format.parse(o2.getVertexDst().getDate());
+                return d1.compareTo(d2);
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                return 0;
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+            return 0;
         });
         HashMap<String, ArrayList<PathEdge>> dividedByDate = new HashMap<>();
         for (final PathEdge pe : edgs) {
@@ -258,7 +255,7 @@ public class EventLayer {
                     }
                     System.out.println("failCount:" + failCount);
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
