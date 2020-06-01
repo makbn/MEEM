@@ -9,6 +9,12 @@ MEEM stands for Meeting of Events and Evidence on the Map, which integrates two 
 
 Download and run MEEM with example data from [here](http://meem.sakku.cloud/MEEM.zip) or see [Release page](https://github.com/makbn/meem/releases).
 
+
+## Data Dictionary
+
+You can read more about [`data_edges.csv`](https://github.com/makbn/meem/blob/master/src/main/resources/data/data_edges.csv) and [`data_vertex.csv`](https://github.com/makbn/meem/blob/master/src/main/resources/data/data_vertex.csv)  [here](https://github.com/makbn/meem/blob/master/data%20dictionary.md).
+
+
 ## Contributors
 
  * [Mehdi Akbarian Rastaghi](https://linkedin.com/in/mehdiakbarian)
