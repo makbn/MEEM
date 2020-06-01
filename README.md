@@ -5,15 +5,13 @@ MEEM stands for Meeting of Events and Evidence on the Map, which integrates two 
 [![MEEM Application](https://github.com/makbn/meem/raw/master/app_vdemo_small.png)](https://www.youtube.com/embed/WFRm2I3Em-w)
 
 
-
-
 ## Run
 
-Download and run MEEM with example data from [here](http://meem.sakku.cloud/MEEM.zip) or see [release page](https://github.com/makbn/meem/releases)
+Download and run MEEM with example data from [here](http://meem.sakku.cloud/MEEM.zip) or see [Release page](https://github.com/makbn/meem/releases).
 
 ## Contributors
 
- * [Mehdi Akbarian-Rastaghi](https://linkedin.com/in/mehdiakbarian)
+ * [Mehdi Akbarian Rastaghi](https://linkedin.com/in/mehdiakbarian)
  * [Behshid Behkamal](http://behkamal.profcms.um.ac.ir/)
  * [Asef Pourmasoumi](http://asef.pourmasoumi.student.um.ac.ir/)
 
